@@ -17,9 +17,10 @@ int main() {
     helloAgain();
 
     return 0;
-
+    //Nejake ine zmeny
 }
 void vyvpisNieco(){
-    //som vedel programovat v c, dal by som tu vypis do konzoly
+    //som vedel programovat v c, dal by som tu vypis do konzoly\
+
 
 }
