@@ -6,6 +6,11 @@ void  helloAgain(){
     cout << "hello again";
 }
 
+
+void  helloAgainAgain(){
+    cout << "hello again again";
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
 
@@ -15,6 +20,6 @@ int main() {
 
 }
 void vyvpisNieco(){
-    //keby som vedel programovat v c, dal by som tu vypis do konzoly
+    //som vedel programovat v c, dal by som tu vypis do konzoly
 
 }
