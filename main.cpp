@@ -3,63 +3,63 @@
 
 using namespace std;
 
-struct coin{
-    int coinValue;
-    int coinCount;
-};
-
 int CoinsCount, Amount;
 
-void quicksort(coin  array[], int left, int right){
+int * coinValue, * coinCount, * returnValue,  * returnCount ;
+
+void quicksort(int left, int right){
     if(left < right){
         int boundary = left;
         for(int i = left + 1; i < right; i++){
-            if(array[i].coinValue > array[left].coinValue){
+            if(coinValue[i] > coinValue[left]){
                 int swapLeft = i;
                 int swapRight = ++boundary;
 
-                int tmpCount = array[swapRight].coinCount;
-                int tmpValue = array[swapRight].coinValue;
+                int tmpCount = coinCount[swapRight];
+                int tmpValue = coinValue[swapRight];
 
-                array[swapRight].coinCount = array[swapLeft].coinCount;
-                array[swapRight].coinValue= array[swapLeft].coinValue;
-                array[swapLeft].coinCount = tmpCount;
-                array[swapLeft].coinValue = tmpValue;
+                coinCount[swapRight] = coinCount[swapLeft];
+                coinValue[swapRight]= coinValue[swapLeft];
+                coinCount[swapLeft] = tmpCount;
+                coinValue[swapLeft] = tmpValue;
             }
         }
         int swapLeft = left;
         int swapRight = boundary;
 
-        int tmpCount = array[swapRight].coinCount;
-        int tmpValue = array[swapRight].coinValue;
+        int tmpCount = coinCount[swapRight];
+        int tmpValue = coinValue[swapRight];
 
-        array[swapRight].coinCount = array[swapLeft].coinCount;
-        array[swapRight].coinValue= array[swapLeft].coinValue;
-        array[swapLeft].coinCount = tmpCount;
-        array[swapLeft].coinValue = tmpValue;
+        coinCount[swapRight] = coinCount[swapLeft];
+        coinValue[swapRight] = coinValue[swapLeft];
+        coinCount[swapLeft] = tmpCount;
+        coinValue [swapLeft]= tmpValue;
 
-        quicksort(array, left, boundary);
-        quicksort(array, boundary + 1, right);
+        quicksort(left, boundary);
+        quicksort(boundary + 1, right);
     }
 }
 
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
-
-    cin >> CoinsCount >> Amount;
-    // vytvorime pole
-    coin * Coins = new coin[CoinsCount];
+    //nacitame pocet minci a sumu na zaplatenie
+    cin >> CoinsCount;
+    //naalokujeme miesto pre polia
+    coinValue = new int[CoinsCount];
+    coinCount = new int[CoinsCount];
+    returnValue = new int[CoinsCount];
+    returnCount = new int[CoinsCount];
     //nacitame hodnoty
     for (int i = 0; i < CoinsCount; i++) {
-        cin >> Coins[i].coinValue >> Coins[i].coinCount;
+        cin >> coinValue[i] >> coinCount[i];
     }
-    cout << "Zotriedene pole minci" << endl;
+    //zotriedime mince podla nominalnej hodnoty
 
-    quicksort(Coins, 0, CoinsCount);
-
-    for (int i = 0; i < CoinsCount; ++i) {
-        cout << Coins[i].coinValue << "x" << Coins[i].coinCount << endl;
+    quicksort(0, CoinsCount);
+    cout << "zotriedene mince: "<<endl;
+    for (int i = 0; i < CoinsCount; i++) {
+        cout <<"minca hodnoty: " << coinValue[i] << " " << coinCount[i] <<"-krat"<< endl;
     }
-
     return 0;
 }
