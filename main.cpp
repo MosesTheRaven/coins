@@ -3,9 +3,17 @@
 
 using namespace std;
 
-int CoinsTypeCount, Amount, returnCoinsAmount ;
+int CoinsTypeCount, Amount, returnCoinsAmount, bestCoinsAmount ;
 bool foundSolution;
-int * coinValue, * coinCount,  * returnCount ;
+int * coinValue, * coinCount,  *returnValue, * returnCount ;
+
+int getIndex(int searchedNumber){
+    int retVal = 0;
+    for(retVal; retVal < CoinsTypeCount; retVal++){
+        if (coinValue[retVal] == searchedNumber) break;
+    }
+    return retVal;
+}
 
 void quicksort(int left, int right){
     if(left < right){
@@ -45,10 +53,6 @@ void payout(int * usedCoins, int remainingSum, int ignoreIndex){
     //koncime vetvu rekurzie, ak sme dosiahli sumu, ktoru sme mali vyplatit
     if (remainingSum == 0) {
         foundSolution = true;
-        cout << "nasiel som riesenie" << endl;
-        for (int i = 0; i < CoinsTypeCount; ++i) {
-            cout << "Minca " << coinValue[i] << " " << coinCount[i] - usedCoins[i] << "-krat" << endl;
-        }
         //skontrolujeme, ci mame najlepsie riesenie
         int usedCoinsAmount = 0;
         returnCoinsAmount = 0;
@@ -60,6 +64,7 @@ void payout(int * usedCoins, int remainingSum, int ignoreIndex){
             for (int i = 0; i < CoinsTypeCount; ++i) {
                 returnCount[i] = coinCount[i] - usedCoins[i];
             }
+            bestCoinsAmount = returnCoinsAmount;
         }
         //inak nechame tak, pretoze sme predtym nasli lepsie riesenie
     }
@@ -97,36 +102,37 @@ void payout(int * usedCoins, int remainingSum, int ignoreIndex){
 }
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
     //nacitame pocet minci a sumu na zaplatenie
     cin >> CoinsTypeCount >> Amount;
     //naalokujeme miesto pre polia
     coinValue = new int[CoinsTypeCount];
     coinCount = new int[CoinsTypeCount];
     returnCount = new int[CoinsTypeCount];
+    returnValue = new int[CoinsTypeCount];
     returnCoinsAmount = 0;
     //nacitame hodnoty
     for (int i = 0; i < CoinsTypeCount; i++) {
         cin >> coinValue[i] >> coinCount[i];
         returnCount[i] = INT8_MAX;
+        returnValue[i] = coinValue[i];
     }
     //zotriedime mince podla nominalnej hodnoty
     quicksort(0, CoinsTypeCount);
-    cout << "zotriedene mince: "<<endl;
-    for (int i = 0; i < CoinsTypeCount; i++) {
-        cout <<"minca hodnoty: " << coinValue[i] << " " << coinCount[i] <<"-krat"<< endl;
-    }
     //vyplatime sumu
-
     int * actualCount = new int[CoinsTypeCount];
 
     for (int i = 0; i < CoinsTypeCount; ++i) actualCount[i] = 0;
 
     payout(actualCount, Amount, 0);
     if(foundSolution){
-        cout << endl << "Najlepsie riesenie: " << returnCoinsAmount << " minci"<< endl;
+        int returnCoinsAmount = 0;
         for (int i = 0; i < CoinsTypeCount; ++i) {
-            cout << "Minca " << coinValue[i] << " " << returnCount[i] << "-krat" << endl;
+            returnCoinsAmount += returnCount[i];
+        }
+        cout << "Pocet pouzitych minci: " << returnCoinsAmount << endl;
+        for (int i = 0; i < CoinsTypeCount; ++i) {
+            int index = getIndex(returnValue[i]);
+            cout << "Minca " << returnValue[i] << ": " << returnCount[index] << endl;
         }
     }
     else{
